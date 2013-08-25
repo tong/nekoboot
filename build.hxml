@@ -1,0 +1,5 @@
+-main NekoBoot
+-neko run.n
+-D nekoboot_main
+-dce full
+--no-traces
