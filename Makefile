@@ -23,6 +23,7 @@ uninstall:
 clean:
 	rm -f run.n
 	rm -f test/app*
+	rm -f nekoboot
 	rm -f nekoboot.zip
 
 .PHONY: build test install uninstall clean

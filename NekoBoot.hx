@@ -96,7 +96,15 @@ class NekoBoot {
 			println( 'Bytecode file not found [$file]' );
 			Sys.exit( 1 );
 		}
-		createExecuteableFromFile( file );
+		var path : String = null;
+		if( args[1] == '-b' ) {
+			if( args[2] == null ) {
+				println( 'Bytecode file not found [$file]' );
+				Sys.exit( 1 );
+			}
+			path = args[2];
+		}
+		createExecuteableFromFile( file, path );
 	}
 
 	#end
