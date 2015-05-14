@@ -4,14 +4,15 @@ import haxe.io.Bytes;
 #if sys
 import sys.FileSystem;
 import sys.io.File;
+import Sys.println;
 #end
 
 /**
 	Haxe port of nekoboot.neko for creating executables from neko bytecode.
 	Original version: https://github.com/HaxeFoundation/neko/blob/master/src/tools/nekoboot.neko
-	
-	neko(.exe) + bytecode.n + 'NEKO' + original neko(.exe) size 
-		
+
+	neko(.exe) + bytecode.n + 'NEKO' + original neko(.exe) size
+
 */
 class NekoBoot {
 
@@ -71,26 +72,30 @@ class NekoBoot {
 
 	#end
 
-	#if nekoboot_main
+	#if nekoboot_run
 
-	static var USAGE = '  Usage : nekoboot <file.n> 
+	static var USAGE = '  Usage : nekoboot <file.n>
   Options :
-    -b <path> : Path to bootable binary 
+    -b <path> : Path to bootable binary
 ';
 
 	static function main() {
 		var args = Sys.args();
 		if( args.length < 1 ) {
-			Sys.println( 'Missing bytecode argument' );
-			Sys.println( USAGE );
+			println( 'Missing neko bytecode argument' );
+			println( USAGE );
 			Sys.exit( 1 );
 		}
 		switch args[0] {
 		case '-help','-h':
-			Sys.println( USAGE );
+			println( USAGE );
 			Sys.exit( 0 );
 		}
 		var file = args[0];
+		if( !FileSystem.exists( file ) ) {
+			println( 'Bytecode file not found [$file]' );
+			Sys.exit( 1 );
+		}
 		createExecuteableFromFile( file );
 	}
 

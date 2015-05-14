@@ -1,7 +1,5 @@
 
 NEKOBOOT
 ==========
-Create executables from neko bytecode.  
-Port from nekoboot.neko to haxe.  
-
-Original version: https://github.com/HaxeFoundation/neko/blob/master/src/tools/nekoboot.neko
+Tool to create executables from neko bytecode.  
+Port from [nekoboot.neko](https://github.com/HaxeFoundation/neko/blob/master/src/tools/nekoboot.neko) to haxe.  

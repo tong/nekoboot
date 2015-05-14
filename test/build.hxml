@@ -1,0 +1,5 @@
+-cmd haxe --cwd .. build.hxml
+-neko app.n
+-main App
+-cmd neko ../run.n app.n
+-cmd ./app

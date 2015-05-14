@@ -2,10 +2,9 @@
     "name": "nekoboot",
 	"url": "https://github.com/tong/nekoboot",
 	"license": "Public",
-	"tags": ["neko","executable","exe"],
-	"description": "Create executables from neko bytecode",
-	"version": "1.0.0-alpha",
+	"tags": ["neko","executable","exe","tool","bytecode"],
+	"description": "Tool to create executables from neko bytecode",
+	"version": "1.0.0-rc.1",
 	"releasenote": "Initial release",
-	"contributors": ["tong"],
-	"dependencies": {}
+	"contributors": ["tong"]
 }
