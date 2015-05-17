@@ -1,11 +1,11 @@
 
 import haxe.io.Bytes;
-
-#if sys
+import haxe.io.Output;
 import sys.FileSystem;
 import sys.io.File;
 import Sys.println;
-#end
+
+using haxe.io.Path;
 
 /**
 	Haxe port of nekoboot.neko for creating executables from neko bytecode.
@@ -16,95 +16,80 @@ import Sys.println;
 */
 class NekoBoot {
 
-	/**
-		Create executable from neko bytecode
-	*/
-	public static inline function createExecuteable( bytecode : Bytes, path : String, ?boot : Bytes ) {
+	public static function write( boot : Bytes, bytecode : Bytes, output : Output ) {
+		var size = boot.length;
+		output.write( boot );
+		output.write( bytecode );
+		output.writeString( 'NEKO' );
+		output.writeByte( size & 0xFF );
+		output.writeByte( ( size >> 8 ) & 0xFF );
+		output.writeByte( ( size >> 16 ) & 0xFF );
+		output.writeByte( ( size >> 24 ) & 0xFF );
+		output.close();
+	}
+
+	public static function create( boot : Bytes, bytecode : Bytes, path : String ) {
+		write( boot, bytecode, File.write( path ) );
+		if( Sys.systemName() != "Windows" )
+			Sys.command( "chmod", [ "755", path ] ); // Set execution rights
+	}
+
+	public static function findNekoBoot() : String {
 		var bootName = 'neko';
 		if( Sys.systemName() == 'Windows' ) bootName += '.exe';
-		if( boot == null ) {
-			#if neko
-			if( ( boot = findNekoBoot( bootName ) ) == null )
-			#end
-			throw 'Bootable executable file not found';
-		}
-		var size = boot.length;
-		var f = File.write( path );
-		f.write( boot );
-		f.write( bytecode );
-		f.writeString( 'NEKO' );
-		f.writeByte( size & 0xFF );
-		f.writeByte( ( size >> 8 ) & 0xFF );
-		f.writeByte( ( size >> 16 ) & 0xFF );
-		f.writeByte( ( size >> 24 ) & 0xFF );
-		f.close();
-		#if sys
-		if( Sys.systemName() != "Windows" ) Sys.command( "chmod", [ "755", path ] ); // Set execution rights
-		#end
-	}
-
-	#if sys
-
-	public static inline function createExecuteableFromFile( bytecodeFile : String, ?path : String, ?boot : Bytes ) {
-		if( path == null ) {
-			var i = ( path = bytecodeFile ).indexOf('.');
-			if( i != -1 ) path = path.substring( 0, i );
-		}
-		createExecuteable( File.getBytes( bytecodeFile ), path, boot );
-	}
-
-	#end
-
-	#if neko
-
-	public static function findNekoBoot( exe : String ) : Bytes {
-		var b : Bytes = null;
 		for( path in neko.vm.Loader.local().getPath() ) {
-			var p = path + exe;
+			var p = path + bootName;
 			if( !FileSystem.exists( p ) )
 				continue;
-			b = File.getBytes( p );
-			if( b.get( 0 ) == 35 ) // '#' It's a script
-				b = null;
+			return p;
 		}
-		return b;
+		return null;
 	}
-
-	#end
 
 	#if nekoboot_run
 
 	static var USAGE = '  Usage : nekoboot <file.n>
   Options :
-    -b <path> : Path to bootable binary
+    -p <path> : Path to generated executeable
+    -b <path> : Path to bootable binary source
 ';
+
+	static inline function abort( msg : String ) {
+		println( msg );
+		Sys.exit(1);
+	}
 
 	static function main() {
 		var args = Sys.args();
 		if( args.length < 1 ) {
 			println( 'Missing neko bytecode argument' );
-			println( USAGE );
-			Sys.exit( 1 );
+			abort( USAGE );
 		}
-		switch args[0] {
-		case '-help','-h':
-			println( USAGE );
-			Sys.exit( 0 );
-		}
-		var file = args[0];
-		if( !FileSystem.exists( file ) ) {
-			println( 'Bytecode file not found [$file]' );
-			Sys.exit( 1 );
-		}
+		var file = args.shift();
+		if( !FileSystem.exists( file ) )
+			abort( 'Bytecode file not found [$file]' );
 		var path : String = null;
-		if( args[1] == '-b' ) {
-			if( args[2] == null ) {
-				println( 'Bytecode file not found [$file]' );
-				Sys.exit( 1 );
+		var boot : String = null;
+		var i = 0;
+		while( i < args.length ) {
+			var k = args[i];
+			var v = args[i+1];
+			if( v == null ) {
+				abort( 'Missing argument' );
 			}
-			path = args[2];
+			switch k {
+			case '-p': path = v;
+			case '-b': boot = v;
+			}
+			i += 2;
 		}
-		createExecuteableFromFile( file, path );
+		if( boot == null ) boot = findNekoBoot();
+		if( boot == null || !FileSystem.exists( boot ) )
+			abort( 'Boot file not found' );
+
+		if( path == null )
+			path = file.withoutExtension();
+		create( File.getBytes( boot ), File.getBytes( file ), path );
 	}
 
 	#end
