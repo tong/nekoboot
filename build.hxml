@@ -3,4 +3,4 @@
 -D nekoboot_run
 -dce full
 --no-traces
--cmd neko run.n run.n -b nekoboot
+-cmd neko run.n run.n -p nekoboot
