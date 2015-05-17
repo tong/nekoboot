@@ -7,5 +7,6 @@ Port from [nekoboot.neko](https://github.com/HaxeFoundation/neko/blob/master/src
 ```
 Usage : nekoboot <file.n>
   Options :
-    -b <path> : Path to bootable binary
+    -p <path> : Path to generated executeable
+    -b <path> : Path to bootable binary source
 ```
