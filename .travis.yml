@@ -1,0 +1,11 @@
+language: haxe
+
+sudo: false
+
+haxe:
+  - "3.2.0"
+  - development
+
+script:
+  - haxe build.hxml
+  - haxe --cwd test build.hxml
