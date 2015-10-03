@@ -6,16 +6,6 @@ Tool to create executables from neko bytecode | Haxe port of [nekoboot.neko](htt
 Nekoboot merges the [neko-vm](http://nekovm.org/) and your application bytecode (.n) into a single executeable file.  
 `neko(.exe) + bytecode.n + 'NEKO' + original neko(.exe) size`
 
----
-
-#### Install
-
-To install from haxelib run:
-```shell
-$ haxelib install nekoboot
-```
-
----
 
 #### Usage
 
