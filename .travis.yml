@@ -3,7 +3,7 @@ language: haxe
 sudo: false
 
 haxe:
-  - "3.2.0"
+  - "3.4.0"
   - development
 
 script:
