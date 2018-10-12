@@ -1,11 +1,15 @@
 language: haxe
 
-sudo: false
-
 haxe:
-  - "3.4.0"
+  - "3.4.7"
   - development
 
+matrix:
+  allow_failures:
+    - haxe: development
+
 script:
-  - haxe build.hxml
+  - haxe run.hxml
   - haxe --cwd test build.hxml
+  - neko run.n test/app.n
+  - ./test/app
