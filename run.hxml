@@ -1,0 +1,7 @@
+-neko run.n
+-main Run
+-dce full
+-cp src
+#--no-traces
+#-D nekoboot_run
+#-cmd neko run.n run.n -p nekoboot

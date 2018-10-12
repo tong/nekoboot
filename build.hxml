@@ -1,7 +1,0 @@
--neko run.n
--main NekoBoot
--dce full
---no-traces
--D nekoboot_run
-
--cmd neko run.n run.n -p nekoboot
