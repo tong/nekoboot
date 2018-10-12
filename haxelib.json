@@ -4,7 +4,7 @@
 	"license": "Public",
 	"tags": ["neko","sys","executable","exe","tool","bytecode","boot","nekoboot"],
 	"description": "Tool to create executables from neko bytecode",
-	"version": "1.0.2",
+	"version": "1.0.1",
 	"releasenote": "Fix haxelib run usage",
 	"contributors": ["tong"],
     "classPath": "src/"
